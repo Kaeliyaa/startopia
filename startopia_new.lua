@@ -88,49 +88,79 @@ function Meds()
     lastToolUsed = "Space Meds"
 end
 
--- Function to check tool result and display indicator
+local encounterActive = false
+local encounterType = ""
+local encounterTool = ""
+
+-- Modified checkToolResult function to handle encounter results
 function checkToolResult(dialog)
     if lastToolUsed ~= "" then
         if dialog:find("Skill Success") then
             toolSuccess = true
-            logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `2SUCCESS ✓")
+            if encounterActive then
+                logToConsole("`$[`2ENCOUNTER RESULT`$] `4" .. encounterType .. " - " .. encounterTool .. " - `2SUCCESS ✓")
+                encounterActive = false
+                encounterType = ""
+                encounterTool = ""
+            else
+                logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `2SUCCESS ✓")
+            end
             return true
         elseif dialog:find("Skill Fail") then
             toolSuccess = false
-            logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `4FAILED ✗")
+            if encounterActive then
+                logToConsole("`$[`2ENCOUNTER RESULT`$] `4" .. encounterType .. " - " .. encounterTool .. " - `4FAILED ✗")
+                encounterActive = false
+                encounterType = ""
+                encounterTool = ""
+            else
+                logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `4FAILED ✗")
+            end
             return true
         end
     end
     return false
 end
 
--- External Encounters Handler
+-- Enhanced External Encounters Handler with logging
 function handleExternalEncounters(dialog)
-        if not (dialog:find("Skill Success") or dialog:find("Skill Fail")) then
+    if not (dialog:find("Skill Success") or dialog:find("Skill Fail")) then
         -- Diplomatic Issues
         if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Diplomatic Issue")
+            encounterActive = true
+            encounterType = "DIPLOMATIC CRISIS"
+            encounterTool = "CYBORG DIPLOMAT"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Dip()
             return true
         end
         
         -- Computer/AI Problems
         if dialog:find("Pirate are hacking our computer systems!") or dialog:find("Star Command are not happy! All they see are the popups when they hail you!") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Computer System Issue")
+            encounterActive = true
+            encounterType = "COMPUTER SYSTEM ISSUE"
+            encounterTool = "AI BRAIN"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             AI()
             return true
         end
         
         -- Radiation Leaks
         if dialog:find("The reactor's leaking radiation!") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Radiation Leak")
+            encounterActive = true
+            encounterType = "RADIATION LEAK"
+            encounterTool = "SPACE MEDS"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Meds()
             return true
         end
         
         -- Document Issues
         if dialog:find("Misfiled documents") or dialog:find("Contacted by a bureaucrat from Laymtak II") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Documentation Issue")
+            encounterActive = true
+            encounterType = "DOCUMENTATION ISSUE"
+            encounterTool = "STELLAR DOCUMENTS"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Doc()
             return true
         end
@@ -139,7 +169,10 @@ function handleExternalEncounters(dialog)
         if dialog:find("A wing of pirate ships swoops in from above!") or 
            dialog:find("Grinding sound coming from outside") or 
            dialog:find("Your ship engineer is urgently requesting a test fire of the Torpedoes") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Combat Situation")
+            encounterActive = true
+            encounterType = "PIRATE ATTACK"
+            encounterTool = "GROWTON TORPEDO"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Torp()
             return true
         end
@@ -148,14 +181,20 @@ function handleExternalEncounters(dialog)
         if dialog:find("Silicoid Worms attached themselves to our shields!") or 
            dialog:find("Shield Generator still fluctuating") or 
            dialog:find("Space Debris") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Shield Malfunction")
+            encounterActive = true
+            encounterType = "SHIELD MALFUNCTION"
+            encounterTool = "HYPERSHIELDS"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Shield()
             return true
         end
         
         -- Hostile Creatures/Crew Issues
         if dialog:find("Rabid space dogs") or dialog:find("Disloyal crew") or dialog:find("Space snakes attack") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Hostile Encounter")
+            encounterActive = true
+            encounterType = "HOSTILE ENCOUNTER"
+            encounterTool = "GIGABLASTER"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Giga()
             return true
         end
@@ -166,14 +205,20 @@ function handleExternalEncounters(dialog)
            dialog:find("The lights throughout the ship are failing. It's getting really dark and hard to see") or 
            dialog:find("Oh dear! It looks like some of the ship's plumbing isn't working") or
            dialog:find("We're still losing pressure to that oxygen leak! The effects on our crew are getting worse!") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Ship System Failure")
+            encounterActive = true
+            encounterType = "SHIP SYSTEM FAILURE"
+            encounterTool = "GALACTIBOLT"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Gala()
             return true
         end
         
         -- Supply/Reputation Issues
         if dialog:find("The refugees of the local starvation crisis are blaming us for it! It's not our fault, but it's damaging our reputation, all the same!") then
-            logToConsole("`b[`9ENCOUNTER`b] `6Supply Crisis")
+            encounterActive = true
+            encounterType = "SUPPLY CRISIS"
+            encounterTool = "STAR SUPPLIES"
+            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
             Sup()
             return true
         end
@@ -181,7 +226,6 @@ function handleExternalEncounters(dialog)
     
     return false
 end
-    
 
 function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
@@ -3836,6 +3880,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
