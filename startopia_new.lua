@@ -88,11 +88,6 @@ function Meds()
     lastToolUsed = "Space Meds"
 end
 
-local encounterActive = false
-local encounterType = ""
-local encounterTool = ""
-
--- Modified checkToolResult function to handle encounter results
 function checkToolResult(dialog)
     if lastToolUsed ~= "" then
         if dialog:find("Skill Success") then
@@ -225,22 +220,59 @@ function handleExternalEncounters(dialog)
     return false
 end
 
-function hook(var)
-    if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
-        checkToolResult(var[1])
+ if var[0] == "OnDialogRequest" then
         
-
-        -- Then check for external encounters (but not during tool result processing)
-        if handleExternalEncounters(var[1]) then
-            return true
+        -- Detect Ready to Land state
+        if var[1]:find("You've found an inhabitable planet to land on and finally have rest") and 
+           var[1]:find("I'm Ready!") then
+            if not landingDetected then
+                landingDetected = true
+                readyToLand = true
+                logToConsole("`4═══════════════════════════════════════════════")
+                logToConsole("`4║ `2🌍 PLANET FOUND! READY TO LAND! 🌍`4 ║")
+                logToConsole("`4║ `6All mission automation has been stopped`4   ║")
+                logToConsole("`4║ `6You can now choose to land manually`4       ║")
+                logToConsole("`4═══════════════════════════════════════════════")
+                
+                -- Optional: Send notification sound
+                sendVariant({
+                    [0] = "OnAddNotification", 
+                    [2] = "`2READY TO LAND!`` Planet found!",
+                    [3] = "audio/achievement.wav"
+                })
+            end
+            return false -- Don't intercept, let player choose
         end
         
-        -- Ready to land check
-        if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
-            logToConsole("`b[`9STARTOPIA`b] `2READY TO LAND! All automation stopped.")
-            logToConsole("`b[`9STARTOPIA`b] `6You can now choose to land on the planet!")
-            return true
+        -- Detect final landing confirmation
+        if var[1]:find("Attempt Final Landing?") and 
+           var[1]:find("The landing will be perilous and the ship will finally have its rest once landed") then
+            logToConsole("`b[`9LANDING CONFIRMATION`b] `6Final landing dialog detected")
+            logToConsole("`b[`9WARNING`b] `4Landing will end the voyage permanently!")
+            return false -- Let player decide manually
         end
+        
+        -- If we're ready to land, stop all automation
+        if readyToLand then
+            logToConsole("`b[`9AUTOMATION STOPPED`b] `6Ready to land - no further actions")
+            return false
+        end
+        
+        -- Normal mission handling continues only if not ready to land
+        if var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
+            
+            -- Check for external encounters first
+            if handleExternalEncounters(var[1]) then
+                return true
+            end
+            
+            -- Check tool results
+            if checkToolResult(var[1]) then
+                return true
+            end
+            
+            -- Continue with mission logic only if not ready to land
+    if not readyToLand then
             
     if var[1]:find("add_label_with_icon|big|`wsnPilots Data") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
@@ -3818,12 +3850,13 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
         Drone()
         return true
     end
+    end        
     end
-
+            
     elseif var[0] == "OnDialogRequest" and var[1]:find("`8Not enough Star Fuel") then
     sendPacket(2, "action|input\n|text|`1check your `4star fuel")
     return true
-    elseif var[0] == "OnDialogRequest" and var[1]:find("Starship Helm") then
+    elseif var[0] == "OnDialogRequest" and var[1]:find("Starship Helm") and not readyToLand then
         logToConsole("`$[`cSTARTING MISSION`$]")
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|beginvoyage")
     return true
@@ -3833,7 +3866,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
     return true
     elseif var[0] == "OnConsoleMessage" and var[1]:find("`9You received") then
     return false
-    elseif var[0] == "OnDialogRequest" and var[1]:find("The voyage continues!") then
+    elseif var[0] == "OnDialogRequest" and var[1]:find("The voyage continues!") and not readyToLand then
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|finishmission")
     logToConsole("`$[`cSUCCESS`$]")
     step = 0
@@ -3872,12 +3905,17 @@ var = {}
     var[1] = opening
     sendVariant(var)
     sleep(500)
+    encounterActive = false
+    encounterType = ""
+    encounterTool = ""
     step = 0
     Mission = 0
     lastToolUsed = ""
     toolSuccess = false
+    readyToLand = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
