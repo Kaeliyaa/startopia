@@ -185,12 +185,12 @@ function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
 
         -- Check encounters FIRST
-        if handleExternalEncounters(dialog) then
+        if handleExternalEncounters(var[1]) then
             return true
         end
         
         -- Then check tool results
-        checkToolResult(dialog)
+        checkToolResult(var[1])
         
         -- Ready to land check
         if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
@@ -3706,7 +3706,7 @@ elseif var[1]:find("add_label_with_icon|big|`wSpace Opera") then
             elseif step == 3 or step == 4 then
                 Dip()
             elseif step == 5 then
-                Gigablaster()
+                Giga()
             elseif step == 6 then
                 Doc()
             end
@@ -3720,7 +3720,7 @@ elseif var[1]:find("add_label_with_icon|big|`wSpace Opera") then
             elseif step == 3 or step == 4 then
                 Dip()
             elseif step == 5 then
-                Gigablaster()
+                Giga()
             elseif step == 6 then
                 Doc()
             end
@@ -3839,6 +3839,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
