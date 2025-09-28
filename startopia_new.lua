@@ -3655,33 +3655,30 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
     end
 
 -- Doing The Job! Mission
+-- Doing The Job! Mission (CORRECTED)
 elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
         if var[1]:find("Skill Success") then
             step = step + 1
-            if step == 1 then
-                Drone()
-            elseif step == 2 or step == 4 or step == 7 then
+            if step == 1 or step == 3 or step == 6 then
                 Dip()
-            elseif step == 3 or step == 8 then
+            elseif step == 2 or step == 7 then
                 Teleporter()
-            elseif step == 5 then
+            elseif step == 4 then
                 Sup()
-            elseif step == 6 then
+            elseif step == 5 then
                 Doc()
             end
         elseif var[1]:find("Skill Fail") then
             if step == 0 then
                 Drone()
-            elseif step == 1 then
-                Drone()
-            elseif step == 2 or step == 4 or step == 7 then
+            elseif step == 1 or step == 3 or step == 6 then
                 Dip()
-            elseif step == 3 or step == 8 then
+            elseif step == 2 or step == 7 then
                 Teleporter()
-            elseif step == 5 then
+            elseif step == 4 then
                 Sup()
-            elseif step == 6 then
+            elseif step == 5 then
                 Doc()
             end
         end
@@ -3694,7 +3691,6 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
         Drone()
         return true
     end
-
 -- Space Opera Mission
 elseif var[1]:find("add_label_with_icon|big|`wSpace Opera") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
@@ -3840,6 +3836,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
