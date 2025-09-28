@@ -110,6 +110,22 @@ function Meds()
     lastToolUsed = "Space Meds"
 end
 
+var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    sleep(500)
+    step = 0
+    Mission = 0
+    lastToolUsed = ""
+    toolSuccess = false
+    AddHook("OnVarlist", "hookied", hook)
+end
+
 -- Function to check tool result and display indicator
 function checkToolResult(dialog)
     if lastToolUsed ~= "" then
@@ -3857,22 +3873,7 @@ add_button_with_icon||END_LIST|noflags|0||
 add_spacer|small||
 end_dialog|stardial||`cEVILGANTENG|
 ]]
-  
-var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    sleep(500)
-    step = 0
-    Mission = 0
-    lastToolUsed = ""
-    toolSuccess = false
-    AddHook("OnVarlist", "hookied", hook)
-end
+
 
 
 
