@@ -124,7 +124,13 @@ end
 
 -- Enhanced External Encounters Handler with logging
 function handleExternalEncounters(dialog)
-    if not (dialog:find("Skill Success") or dialog:find("Skill Fail")) then
+        -- Add nil check first
+    if not dialog or dialog == "" then
+        return false
+    end
+    
+    -- Check for encounters regardless of skill results, but with proper error handling
+    local success, result = pcall(function()
         -- Diplomatic Issues
         if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
             encounterActive = true
@@ -3880,6 +3886,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
