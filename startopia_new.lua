@@ -3622,7 +3622,7 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
         if var[1]:find("Skill Success") then
             step = step + 1
             if step == 1 or step == 3 or step == 6 then
-                Cyborg()
+                Dip()
             elseif step == 2 or step == 4 then
                 Teleporter()
             elseif step == 5 then
@@ -3632,9 +3632,9 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
             end
         elseif var[1]:find("Skill Fail") then
             if step == 0 then
-                Cyborg()
+                Dip()
             elseif step == 1 or step == 3 or step == 6 then
-                Cyborg()
+                Dip()
             elseif step == 2 or step == 4 then
                 Teleporter()
             elseif step == 5 then
@@ -3649,7 +3649,7 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
         if Mission == 0 then
             logToConsole("`b[`9MISSION`b] `6Lonely Little Droid")
         end
-        Cyborg()
+        Dip()
         return true
     end
 
@@ -3661,7 +3661,7 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
             if step == 1 then
                 Drone()
             elseif step == 2 or step == 4 or step == 7 then
-                Cyborg()
+                Dip()
             elseif step == 3 or step == 8 then
                 Teleporter()
             elseif step == 5 then
@@ -3675,7 +3675,7 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
             elseif step == 1 then
                 Drone()
             elseif step == 2 or step == 4 or step == 7 then
-                Cyborg()
+                Dip()
             elseif step == 3 or step == 8 then
                 Teleporter()
             elseif step == 5 then
@@ -3704,7 +3704,7 @@ elseif var[1]:find("add_label_with_icon|big|`wSpace Opera") then
             elseif step == 2 then
                 Teleporter()
             elseif step == 3 or step == 4 then
-                Cyborg()
+                Dip()
             elseif step == 5 then
                 Gigablaster()
             elseif step == 6 then
@@ -3718,7 +3718,7 @@ elseif var[1]:find("add_label_with_icon|big|`wSpace Opera") then
             elseif step == 2 then
                 Teleporter()
             elseif step == 3 or step == 4 then
-                Cyborg()
+                Dip()
             elseif step == 5 then
                 Gigablaster()
             elseif step == 6 then
@@ -3743,7 +3743,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
             if step == 1 then
                 Drone()
             elseif step == 2 or step == 4 or step == 10 then
-                Cyborg()
+                Dip()
             elseif step == 3 or step == 9 then
                 Growton()
             elseif step == 5 then
@@ -3759,7 +3759,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
             elseif step == 1 then
                 Drone()
             elseif step == 2 or step == 4 or step == 10 then
-                Cyborg()
+                Dip()
             elseif step == 3 or step == 9 then
                 Growton()
             elseif step == 5 then
@@ -3839,6 +3839,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
