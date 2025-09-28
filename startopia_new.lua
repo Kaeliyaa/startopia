@@ -3628,7 +3628,7 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
             elseif step == 5 then
                 Scan()
             elseif step == 7 then
-                Gigablaster()
+                Giga()
             end
         elseif var[1]:find("Skill Fail") then
             if step == 0 then
@@ -3640,7 +3640,7 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
             elseif step == 5 then
                 Scan()
             elseif step == 7 then
-                Gigablaster()
+                Giga()
             end
         end
         return true
@@ -3839,6 +3839,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
