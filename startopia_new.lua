@@ -3657,7 +3657,7 @@ elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
     end
 
 -- Doing The Job! Mission
-elseif var[1]:find("add_label_with_icon|big|`wDoing The Job!") then
+elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
         if var[1]:find("Skill Success") then
             step = step + 1
@@ -3842,6 +3842,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
