@@ -3290,7 +3290,7 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing The Right Thing!") or var[1]
     Drone()
     return true
     end
-    elseif var[1]:find("add_label_with_icon|big|`wWho's There")
+    elseif var[1]:find("add_label_with_icon|big|`wWho's there?")
     then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
     if var[1]:find("Skill Success") then
@@ -3854,6 +3854,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
