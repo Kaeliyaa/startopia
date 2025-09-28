@@ -31,73 +31,61 @@ if true then
     function Drone()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6532")
     lastToolUsed = "Tactical Drone"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Teleporter()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6526")
     lastToolUsed = "Teleporter Charge"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Doc()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6534")
     lastToolUsed = "Stellar Documents"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Scan()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6530")
     lastToolUsed = "Quadriscanner"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Torp()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6540")
     lastToolUsed = "Growton Torpedo"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Dip()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6538")
     lastToolUsed = "Cyborg Diplomat"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Sup()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6536")
     lastToolUsed = "Star Supplies"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Giga()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6528")
     lastToolUsed = "Gigablaster"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Shield()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6518")
     lastToolUsed = "HyperShields"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function AI()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6520")
     lastToolUsed = "AI Brain"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Gala()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6522")
     lastToolUsed = "Galactibolt"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 function Meds()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6524")
     lastToolUsed = "Space Meds"
-    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
 end
 
 -- Function to check tool result and display indicator
@@ -3854,6 +3842,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
