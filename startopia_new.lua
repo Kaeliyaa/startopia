@@ -184,12 +184,13 @@ end
 function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
 
-        -- Then check for external encounters (but not during tool result processing)
-        if handleExternalEncounters(var[1]) then
+        -- Check encounters FIRST
+        if handleExternalEncounters(dialog) then
             return true
         end
-        -- First, check and display tool results
-        checkToolResult(var[1])
+        
+        -- Then check tool results
+        checkToolResult(dialog)
         
         -- Ready to land check
         if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
@@ -3838,6 +3839,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
