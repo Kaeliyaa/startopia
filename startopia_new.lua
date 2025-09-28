@@ -3665,7 +3665,7 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
             elseif step == 3 or step == 8 then
                 Teleporter()
             elseif step == 5 then
-                Star()
+                Sup()
             elseif step == 6 then
                 Doc()
             end
@@ -3679,7 +3679,7 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing the Job!") then
             elseif step == 3 or step == 8 then
                 Teleporter()
             elseif step == 5 then
-                Star()
+                Sup()
             elseif step == 6 then
                 Doc()
             end
@@ -3745,13 +3745,13 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
             elseif step == 2 or step == 4 or step == 10 then
                 Dip()
             elseif step == 3 or step == 9 then
-                Growton()
+                Torp()
             elseif step == 5 then
-                Star()
+                Sup()
             elseif step == 6 then
                 Meds()
             elseif step == 7 then
-                HyperShields()
+                Shield()
             end
         elseif var[1]:find("Skill Fail") then
             if step == 0 then
@@ -3761,13 +3761,13 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
             elseif step == 2 or step == 4 or step == 10 then
                 Dip()
             elseif step == 3 or step == 9 then
-                Growton()
+                Torp()
             elseif step == 5 then
-                Star()
+                Sup()
             elseif step == 6 then
                 Meds()
             elseif step == 7 then
-                HyperShields()
+                Shield()
             end
         end
         return true
@@ -3839,6 +3839,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
