@@ -124,13 +124,6 @@ end
 
 -- Enhanced External Encounters Handler with logging
 function handleExternalEncounters(dialog)
-        -- Add nil check first
-    if not dialog or dialog == "" then
-        return false
-    end
-    
-    -- Check for encounters regardless of skill results, but with proper error handling
-    local success, result = pcall(function()
         -- Diplomatic Issues
         if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
             encounterActive = true
@@ -228,7 +221,6 @@ function handleExternalEncounters(dialog)
             Sup()
             return true
         end
-    end
     
     return false
 end
