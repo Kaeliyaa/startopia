@@ -6,7 +6,7 @@
 function logTime(satan, satanSleep) 
     logToConsole("[ `4E V I L`` ] `9Script Loading...")
     sendVariant({
-      [0] = "OnSetMissionTimer", 
+      [0] = "OnSetMissionTimer",
       [1] = satan, 
     })
   sleep(satanSleep)
@@ -185,15 +185,16 @@ function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
 -- Increment turn counter when we see a dialog with Health (indicates a turn)
         if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
-            turnCount = turnCount + 1
+            step = step + 1
         end
         
         -- Only check for encounters after 2+ turns
-        if turnCount >= 1 then
-            if handleExternalEncounters(var[1]) then
-                return true
-            end
+       -- Only check encounters if we've already made at least one move
+    if step > 0 then
+        if handleExternalEncounters(var[1]) then
+            return true
         end
+    end
         
         -- Ready to land check
         if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
@@ -3842,6 +3843,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
