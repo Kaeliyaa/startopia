@@ -3931,6 +3931,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
             end
         end
         return true
+    end
     else
         step = 0
         if Mission == 0 then
@@ -3938,7 +3939,6 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
         end
         Drone()
         return true
-    end
     end
     end
     end
