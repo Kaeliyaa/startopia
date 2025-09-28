@@ -3631,6 +3631,169 @@ elseif var[1]:find("add_label_with_icon|big|`wBlackout") then
         Gala()  -- Start with Gala
         return true
     end
+    -- Lonely Little Droid Mission
+elseif var[1]:find("add_label_with_icon|big|`wLonely Little Droid") then
+    if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
+        if var[1]:find("Skill Success") then
+            step = step + 1
+            if step == 1 or step == 3 or step == 6 then
+                Cyborg()
+            elseif step == 2 or step == 4 then
+                Teleporter()
+            elseif step == 5 then
+                Scan()
+            elseif step == 7 then
+                Gigablaster()
+            end
+        elseif var[1]:find("Skill Fail") then
+            if step == 0 then
+                Cyborg()
+            elseif step == 1 or step == 3 or step == 6 then
+                Cyborg()
+            elseif step == 2 or step == 4 then
+                Teleporter()
+            elseif step == 5 then
+                Scan()
+            elseif step == 7 then
+                Gigablaster()
+            end
+        end
+        return true
+    else
+        step = 0
+        if Mission == 0 then
+            logToConsole("`b[`9MISSION`b] `6Lonely Little Droid")
+        end
+        Cyborg()
+        return true
+    end
+
+-- Doing The Job! Mission
+elseif var[1]:find("add_label_with_icon|big|`wDoing The Job!") then
+    if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
+        if var[1]:find("Skill Success") then
+            step = step + 1
+            if step == 1 then
+                Drone()
+            elseif step == 2 or step == 4 or step == 7 then
+                Cyborg()
+            elseif step == 3 or step == 8 then
+                Teleporter()
+            elseif step == 5 then
+                Star()
+            elseif step == 6 then
+                Doc()
+            end
+        elseif var[1]:find("Skill Fail") then
+            if step == 0 then
+                Drone()
+            elseif step == 1 then
+                Drone()
+            elseif step == 2 or step == 4 or step == 7 then
+                Cyborg()
+            elseif step == 3 or step == 8 then
+                Teleporter()
+            elseif step == 5 then
+                Star()
+            elseif step == 6 then
+                Doc()
+            end
+        end
+        return true
+    else
+        step = 0
+        if Mission == 0 then
+            logToConsole("`b[`9MISSION`b] `6Doing The Job!")
+        end
+        Drone()
+        return true
+    end
+
+-- Space Opera Mission
+elseif var[1]:find("add_label_with_icon|big|`wSpace Opera") then
+    if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
+        if var[1]:find("Skill Success") then
+            step = step + 1
+            if step == 1 then
+                Drone()
+            elseif step == 2 then
+                Teleporter()
+            elseif step == 3 or step == 4 then
+                Cyborg()
+            elseif step == 5 then
+                Gigablaster()
+            elseif step == 6 then
+                Doc()
+            end
+        elseif var[1]:find("Skill Fail") then
+            if step == 0 then
+                Drone()
+            elseif step == 1 then
+                Drone()
+            elseif step == 2 then
+                Teleporter()
+            elseif step == 3 or step == 4 then
+                Cyborg()
+            elseif step == 5 then
+                Gigablaster()
+            elseif step == 6 then
+                Doc()
+            end
+        end
+        return true
+    else
+        step = 0
+        if Mission == 0 then
+            logToConsole("`b[`9MISSION`b] `6Space Opera")
+        end
+        Drone()
+        return true
+    end
+
+-- A New Home Mission
+elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
+    if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
+        if var[1]:find("Skill Success") then
+            step = step + 1
+            if step == 1 then
+                Drone()
+            elseif step == 2 or step == 4 or step == 10 then
+                Cyborg()
+            elseif step == 3 or step == 9 then
+                Growton()
+            elseif step == 5 then
+                Star()
+            elseif step == 6 then
+                Meds()
+            elseif step == 7 then
+                HyperShields()
+            end
+        elseif var[1]:find("Skill Fail") then
+            if step == 0 then
+                Drone()
+            elseif step == 1 then
+                Drone()
+            elseif step == 2 or step == 4 or step == 10 then
+                Cyborg()
+            elseif step == 3 or step == 9 then
+                Growton()
+            elseif step == 5 then
+                Star()
+            elseif step == 6 then
+                Meds()
+            elseif step == 7 then
+                HyperShields()
+            end
+        end
+        return true
+    else
+        step = 0
+        if Mission == 0 then
+            logToConsole("`b[`9MISSION`b] `6A New Home")
+        end
+        Drone()
+        return true
+    end
     end
 
     elseif var[0] == "OnDialogRequest" and var[1]:find("`8Not enough Star Fuel") then
@@ -3691,6 +3854,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
