@@ -3600,24 +3600,26 @@ elseif var[1]:find("add_label_with_icon|big|`wBlackout") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
         if var[1]:find("Skill Success") then
             step = step + 1
-            if step == 1 or step == 5 then
-                Gala()
-            elseif step == 2 then
+            if step == 1 then
                 Drone()
-            elseif step == 3 then
+            elseif step == 2 then
                 Shield()
-            elseif step == 4 then
+            elseif step == 3 or step == 4 then
                 Torp()
+            elseif step == 5 then
+                Gala()  -- Final step
             end
         elseif var[1]:find("Skill Fail") then
-            if step == 0 or step == 5 then
-                Gala()
+            if step == 0 then
+                Gala()  -- Start action
             elseif step == 1 then
                 Drone()
             elseif step == 2 then
                 Shield()
-            elseif step == 3 then
+            elseif step == 3 or step == 4 then
                 Torp()
+            elseif step == 5 then
+                Gala()  -- Retry final step
             end
         end
         return true
@@ -3626,7 +3628,7 @@ elseif var[1]:find("add_label_with_icon|big|`wBlackout") then
         if Mission == 0 then
             logToConsole("`b[`9MISSION`b] `6Blackout")
         end
-        Gala()
+        Gala()  -- Start with Gala
         return true
     end
     end
@@ -3689,6 +3691,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
