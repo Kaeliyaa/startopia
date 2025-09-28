@@ -1,3 +1,25 @@
+-- Debug version - Add safety checks for required functions
+local function checkRequiredFunctions()
+    local required = {
+        "logToConsole", "sendVariant", "sleep", "sendPacket", 
+        "getLocal", "getDiscordID", "AddHook"
+    }
+    
+    for _, func in ipairs(required) do
+        if not _G[func] then
+            print("ERROR: Missing function: " .. func)
+            return false
+        end
+    end
+    return true
+end
+
+-- Only proceed if all required functions exist
+if not checkRequiredFunctions() then
+    print("Script cannot run - missing required functions")
+    return
+end
+
 -- Don't touch it! --
 -- Not for sale --
 -- Respect the creator! --
@@ -3843,6 +3865,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
