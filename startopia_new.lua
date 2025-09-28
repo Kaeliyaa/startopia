@@ -957,7 +957,7 @@ elseif var[1]:find("add_label_with_icon|big|`wRocket Part Cleanup") then
         return true
     end
 
-elseif var[1]:find("add_label_with_icon|big|`wStuck In The Middle") then
+elseif var[1]:find("add_label_with_icon|big|`wStuck in the Middle") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
         if var[1]:find("Skill Success") then
             step = step + 1
@@ -3854,6 +3854,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
