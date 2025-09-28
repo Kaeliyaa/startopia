@@ -189,7 +189,7 @@ function hook(var)
         end
         
         -- Only check for encounters after 2+ turns
-        if turnCount >= 2 then
+        if turnCount >= 1 then
             if handleExternalEncounters(var[1]) then
                 return true
             end
@@ -3842,6 +3842,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
