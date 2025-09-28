@@ -106,9 +106,6 @@ end
 
 -- External Encounters Handler
 function handleExternalEncounters(dialog)
-    -- Only check for encounters if we're not in the middle of processing a tool result
-    if not (dialog:find("Skill Success") or dialog:find("Skill Fail")) then
-        
         -- Diplomatic Issues
         if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
             logToConsole("`b[`9ENCOUNTER`b] `6Diplomatic Issue")
@@ -186,14 +183,13 @@ end
     
 function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
-        
-        -- First, check and display tool results
-        checkToolResult(var[1])
-        
+
         -- Then check for external encounters (but not during tool result processing)
         if handleExternalEncounters(var[1]) then
             return true
         end
+        -- First, check and display tool results
+        checkToolResult(var[1])
         
         -- Ready to land check
         if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
@@ -3842,6 +3838,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
