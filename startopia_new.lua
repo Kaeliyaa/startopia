@@ -88,6 +88,165 @@ function Meds()
     lastToolUsed = "Space Meds"
 end
 
+-- Mission-Interrupting Encounter System
+local encounterQueue = {}
+local processingEncounter = false
+local missionPaused = false
+local savedMissionState = {
+    step = 0,
+    missionType = ""
+}
+
+-- Function to pause mission and save state
+function pauseMission()
+    if not missionPaused then
+        savedMissionState.step = step
+        savedMissionState.missionType = Mission
+        missionPaused = true
+        logToConsole("`b[`4MISSION PAUSED`b] `6Step " .. step .. " saved, handling encounters...")
+    end
+end
+
+-- Function to resume mission from saved state
+function resumeMission()
+    if missionPaused then
+        step = savedMissionState.step
+        Mission = savedMissionState.missionType
+        missionPaused = false
+        logToConsole("`b[`2MISSION RESUMED`b] `6Continuing from step " .. step)
+    end
+end
+
+-- Function to add encounter to queue and pause mission
+function queueEncounter(encounterType, encounterTool, toolFunction)
+    -- Pause mission when first encounter is detected
+    if #encounterQueue == 0 and not processingEncounter then
+        pauseMission()
+    end
+    
+    table.insert(encounterQueue, {
+        type = encounterType,
+        tool = encounterTool,
+        action = toolFunction
+    })
+    logToConsole("`b[`4ENCOUNTER QUEUED`b] `6" .. encounterType .. " - " .. encounterTool)
+end
+
+-- Function to process next encounter in queue
+function processNextEncounter()
+    if #encounterQueue > 0 and not processingEncounter then
+        local encounter = table.remove(encounterQueue, 1)
+        processingEncounter = true
+        encounterActive = true
+        encounterType = encounter.type
+        encounterTool = encounter.tool
+        
+        logToConsole("`b[`4PROCESSING ENCOUNTER`b] `6" .. encounterType .. " - " .. encounterTool)
+        encounter.action() -- Execute the tool function
+        return true
+    elseif #encounterQueue == 0 and not processingEncounter and missionPaused then
+        -- No more encounters to process, resume mission
+        resumeMission()
+        return false
+    end
+    return false
+end
+
+-- Function to check if mission should be blocked (when encounters are active)
+function shouldBlockMission()
+    return missionPaused or processingEncounter or encounterActive
+end
+
+-- Function to clear all encounter states (useful for mission completion or landing)
+function clearAllEncounterStates()
+    encounterQueue = {}
+    processingEncounter = false
+    encounterActive = false
+    missionPaused = false
+    savedMissionState = {step = 0, missionType = ""}
+    logToConsole("`b[`9ALL STATES CLEARED`b] `6Mission and encounter states reset")
+end
+
+-- Enhanced encounter detection function
+function handleExternalEncounters(dialog)
+    local encountersFound = 0
+    
+    -- Diplomatic Issues
+    if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
+        queueEncounter("DIPLOMATIC CRISIS", "CYBORG DIPLOMAT", function() Dip() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Computer/AI Problems
+    if dialog:find("Pirate are hacking our computer systems!") or dialog:find("Star Command are not happy! All they see are the popups when they hail you!") then
+        queueEncounter("COMPUTER SYSTEM ISSUE", "AI BRAIN", function() AI() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Radiation Leaks
+    if dialog:find("The reactor's leaking radiation!") then
+        queueEncounter("RADIATION LEAK", "SPACE MEDS", function() Meds() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Document Issues
+    if dialog:find("Misfiled documents") or dialog:find("Contacted by a bureaucrat from Laymtak II") then
+        queueEncounter("DOCUMENTATION ISSUE", "STELLAR DOCUMENTS", function() Doc() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Combat/Torpedo Issues
+    if dialog:find("A wing of pirate ships swoops in from above!") or 
+       dialog:find("Grinding sound coming from outside") or 
+       dialog:find("Your ship engineer is urgently requesting a test fire of the Torpedoes") then
+        queueEncounter("PIRATE ATTACK", "GROWTON TORPEDO", function() Torp() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Shield Problems
+    if dialog:find("Silicoid Worms attached themselves to our shields!") or 
+       dialog:find("Shield Generator still fluctuating") or 
+       dialog:find("Space Debris") then
+        queueEncounter("SHIELD MALFUNCTION", "HYPERSHIELDS", function() Shield() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Hostile Creatures/Crew Issues
+    if dialog:find("Rabid space dogs") or dialog:find("Disloyal crew") or dialog:find("Space snakes attack") then
+        queueEncounter("HOSTILE ENCOUNTER", "GIGABLASTER", function() Giga() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Ship System Failures
+    if dialog:find("The main cargo door isn't opening") or 
+       dialog:find("One of the crew looks out of the window and notices that the left engine is almost hanging off!") or
+       dialog:find("The lights throughout the ship are failing. It's getting really dark and hard to see") or 
+       dialog:find("Oh dear! It looks like some of the ship's plumbing isn't working") or
+       dialog:find("We're still losing pressure to that oxygen leak! The effects on our crew are getting worse!") then
+        queueEncounter("SHIP SYSTEM FAILURE", "GALACTIBOLT", function() Gala() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Supply/Reputation Issues
+    if dialog:find("The refugees of the local starvation crisis are blaming us for it! It's not our fault, but it's damaging our reputation, all the same!") then
+        queueEncounter("SUPPLY CRISIS", "STAR SUPPLIES", function() Sup() end)
+        encountersFound = encountersFound + 1
+    end
+    
+    -- Log multiple encounters detected
+    if encountersFound > 1 then
+        logToConsole("`b[`4MULTIPLE ENCOUNTERS`b] `6Detected " .. encountersFound .. " encounters! Queuing them...")
+    end
+    
+    -- Process the first encounter if any were found
+    if encountersFound > 0 then
+        return processNextEncounter()
+    end
+    
+    return false
+end
+
+-- Enhanced checkToolResult function to handle encounter completion and mission resumption
 function checkToolResult(dialog)
     if lastToolUsed ~= "" then
         if dialog:find("Skill Success") then
@@ -95,8 +254,20 @@ function checkToolResult(dialog)
             if encounterActive then
                 logToConsole("`$[`2ENCOUNTER RESULT`$] `4" .. encounterType .. " - " .. encounterTool .. " - `2SUCCESS ✓")
                 encounterActive = false
+                processingEncounter = false
                 encounterType = ""
                 encounterTool = ""
+                
+                -- Small delay before processing next encounter or resuming mission
+                sleep(500)
+                
+                -- Check if there are more encounters to process
+                if #encounterQueue > 0 then
+                    processNextEncounter()
+                else
+                    -- No more encounters, resume mission
+                    resumeMission()
+                end
             else
                 logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `2SUCCESS ✓")
             end
@@ -106,8 +277,20 @@ function checkToolResult(dialog)
             if encounterActive then
                 logToConsole("`$[`2ENCOUNTER RESULT`$] `4" .. encounterType .. " - " .. encounterTool .. " - `4FAILED ✗")
                 encounterActive = false
+                processingEncounter = false
                 encounterType = ""
                 encounterTool = ""
+                
+                -- Small delay before processing next encounter or resuming mission
+                sleep(500)
+                
+                -- Check if there are more encounters to process
+                if #encounterQueue > 0 then
+                    processNextEncounter()
+                else
+                    -- No more encounters, resume mission
+                    resumeMission()
+                end
             else
                 logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `4FAILED ✗")
             end
@@ -117,110 +300,8 @@ function checkToolResult(dialog)
     return false
 end
 
--- Enhanced External Encounters Handler with logging
-function handleExternalEncounters(dialog)
-        -- Diplomatic Issues
-        if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
-            encounterActive = true
-            encounterType = "DIPLOMATIC CRISIS"
-            encounterTool = "CYBORG DIPLOMAT"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Dip()
-            return true
-        end
-        
-        -- Computer/AI Problems
-        if dialog:find("Pirate are hacking our computer systems!") or dialog:find("Star Command are not happy! All they see are the popups when they hail you!") then
-            encounterActive = true
-            encounterType = "COMPUTER SYSTEM ISSUE"
-            encounterTool = "AI BRAIN"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            AI()
-            return true
-        end
-        
-        -- Radiation Leaks
-        if dialog:find("The reactor's leaking radiation!") then
-            encounterActive = true
-            encounterType = "RADIATION LEAK"
-            encounterTool = "SPACE MEDS"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Meds()
-            return true
-        end
-        
-        -- Document Issues
-        if dialog:find("Misfiled documents") or dialog:find("Contacted by a bureaucrat from Laymtak II") then
-            encounterActive = true
-            encounterType = "DOCUMENTATION ISSUE"
-            encounterTool = "STELLAR DOCUMENTS"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Doc()
-            return true
-        end
-        
-        -- Combat/Torpedo Issues
-        if dialog:find("A wing of pirate ships swoops in from above!") or 
-           dialog:find("Grinding sound coming from outside") or 
-           dialog:find("Your ship engineer is urgently requesting a test fire of the Torpedoes") then
-            encounterActive = true
-            encounterType = "PIRATE ATTACK"
-            encounterTool = "GROWTON TORPEDO"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Torp()
-            return true
-        end
-        
-        -- Shield Problems
-        if dialog:find("Silicoid Worms attached themselves to our shields!") or 
-           dialog:find("Shield Generator still fluctuating") or 
-           dialog:find("Space Debris") then
-            encounterActive = true
-            encounterType = "SHIELD MALFUNCTION"
-            encounterTool = "HYPERSHIELDS"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Shield()
-            return true
-        end
-        
-        -- Hostile Creatures/Crew Issues
-        if dialog:find("Rabid space dogs") or dialog:find("Disloyal crew") or dialog:find("Space snakes attack") then
-            encounterActive = true
-            encounterType = "HOSTILE ENCOUNTER"
-            encounterTool = "GIGABLASTER"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Giga()
-            return true
-        end
-        
-        -- Ship System Failures
-        if dialog:find("The main cargo door isn't opening") or 
-           dialog:find("One of the crew looks out of the window and notices that the left engine is almost hanging off!") or
-           dialog:find("The lights throughout the ship are failing. It's getting really dark and hard to see") or 
-           dialog:find("Oh dear! It looks like some of the ship's plumbing isn't working") or
-           dialog:find("We're still losing pressure to that oxygen leak! The effects on our crew are getting worse!") then
-            encounterActive = true
-            encounterType = "SHIP SYSTEM FAILURE"
-            encounterTool = "GALACTIBOLT"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Gala()
-            return true
-        end
-        
-        -- Supply/Reputation Issues
-        if dialog:find("The refugees of the local starvation crisis are blaming us for it! It's not our fault, but it's damaging our reputation, all the same!") then
-            encounterActive = true
-            encounterType = "SUPPLY CRISIS"
-            encounterTool = "STAR SUPPLIES"
-            logToConsole("`b[`4ENCOUNTER DETECTED`b] `6" .. encounterType)
-            Sup()
-            return true
-        end
-    
-    return false
-end
-
- if var[0] == "OnDialogRequest" then
+ function hook(var)
+    if var[0] == "OnDialogRequest" then
         
         -- Detect Ready to Land state
         if var[1]:find("You've found an inhabitable planet to land on and finally have rest") and 
@@ -228,6 +309,7 @@ end
             if not landingDetected then
                 landingDetected = true
                 readyToLand = true
+                clearAllEncounterStates() -- Clear all states when landing
                 logToConsole("`4═══════════════════════════════════════════════")
                 logToConsole("`4║ `2🌍 PLANET FOUND! READY TO LAND! 🌍`4 ║")
                 logToConsole("`4║ `6All mission automation has been stopped`4   ║")
@@ -266,13 +348,19 @@ end
                 return true
             end
             
-            -- Check tool results
+            -- Check tool results (this handles encounter completion too)
             if checkToolResult(var[1]) then
                 return true
             end
             
-            -- Continue with mission logic only if not ready to land
-    if not readyToLand then
+            -- IMPORTANT: Block normal mission logic if encounters are active
+            if shouldBlockMission() then
+                logToConsole("`b[`4MISSION BLOCKED`b] `6Waiting for encounters to complete...")
+                return true
+            end
+            
+            -- Continue with mission logic only if not ready to land and not blocked
+            if not readyToLand then
             
     if var[1]:find("add_label_with_icon|big|`wsnPilots Data") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
@@ -3871,12 +3959,14 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
     logToConsole("`$[`cSUCCESS`$]")
     step = 0
     Mission = 0
+    clearAllEncounterStates() -- Clear all encounter states when mission completes
     return true
     elseif var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") then
     return false
     end
     return false
     end
+    
     opening = [[
 add_label_with_icon|big|`9S T A R T O P I A GentaHax``|left|7074|
 add_textbox|`2Hello`@]]..getLocal().name ..[[`` Thank You For Using This Script :3|
@@ -3915,6 +4005,7 @@ var = {}
     readyToLand = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
