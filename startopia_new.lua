@@ -3314,7 +3314,6 @@ elseif var[1]:find("add_label_with_icon|big|`wDoing The Right Thing!") or var[1]
     Drone()
     return true
     end
-    end
     -- Add these missing missions before the final end statement:
 
 elseif var[1]:find("add_label_with_icon|big|`wGrowlactus") then
@@ -3582,6 +3581,7 @@ elseif var[1]:find("add_label_with_icon|big|`wBlackout") then
         Gala()
         return true
     end
+    end
 
     elseif var[0] == "OnDialogRequest" and var[1]:find("`8Not enough Star Fuel") then
     sendPacket(2, "action|input\n|text|`1check your `4star fuel")
@@ -3639,3 +3639,4 @@ var = {}
     Mission = 0
     AddHook("OnVarlist", "hookied", hook)
 end
+
