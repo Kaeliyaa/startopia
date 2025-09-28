@@ -1,25 +1,3 @@
--- Debug version - Add safety checks for required functions
-local function checkRequiredFunctions()
-    local required = {
-        "logToConsole", "sendVariant", "sleep", "sendPacket", 
-        "getLocal", "getDiscordID", "AddHook"
-    }
-    
-    for _, func in ipairs(required) do
-        if not _G[func] then
-            print("ERROR: Missing function: " .. func)
-            return false
-        end
-    end
-    return true
-end
-
--- Only proceed if all required functions exist
-if not checkRequiredFunctions() then
-    print("Script cannot run - missing required functions")
-    return
-end
-
 -- Don't touch it! --
 -- Not for sale --
 -- Respect the creator! --
@@ -108,22 +86,6 @@ end
 function Meds()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6524")
     lastToolUsed = "Space Meds"
-end
-
-var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    sleep(500)
-    step = 0
-    Mission = 0
-    lastToolUsed = ""
-    toolSuccess = false
-    AddHook("OnVarlist", "hookied", hook)
 end
 
 -- Function to check tool result and display indicator
@@ -3874,11 +3836,21 @@ add_spacer|small||
 end_dialog|stardial||`cEVILGANTENG|
 ]]
 
-
-
-
-
-
+var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    sleep(500)
+    step = 0
+    Mission = 0
+    lastToolUsed = ""
+    toolSuccess = false
+    AddHook("OnVarlist", "hookied", hook)
+end
 
 
 
