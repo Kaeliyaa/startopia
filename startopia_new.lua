@@ -203,20 +203,28 @@ function handleExternalEncounters(dialog)
     return false
 end
     
+
 function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
--- Increment turn counter when we see a dialog with Health (indicates a turn)
-        if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
-            step = step + 1
-        end
         
-        -- Only check for encounters after 2+ turns
-       -- Only check encounters if we've already made at least one move
-    if step > 0 then
-        if handleExternalEncounters(var[1]) then
-            return true
+                -- FIRST: Check for tool results (Success/Fail) and handle step progression
+        if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
+            -- Log the tool result
+            if lastToolUsed ~= "" then
+                if var[1]:find("Skill Success") then
+                    logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `2SUCCESS ✓")
+                elseif var[1]:find("Skill Fail") then
+                    logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `4FAILED ✗")
+                end
+            end
+        end  -- Missing 'end' statement added here
+            
+        -- SECOND: Check for encounters (but only if we're not in first turn)
+        if step > 0 then
+            if handleExternalEncounters(var[1]) then
+                return true  -- Exit early if encounter was handled
+            end
         end
-    end
         
         -- Ready to land check
         if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
@@ -3865,6 +3873,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
