@@ -197,11 +197,23 @@ function handleExternalEncounters(dialog)
 end
     
 function hook(var)
-if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
-    -- Check for external encounters FIRST - on every dialog
-    if handleExternalEncounters(var[1]) then
-        return true
-    end
+    if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
+        
+        -- First, check and display tool results
+        checkToolResult(var[1])
+        
+        -- Then check for external encounters (but not during tool result processing)
+        if handleExternalEncounters(var[1]) then
+            return true
+        end
+        
+        -- Ready to land check
+        if var[1]:find("I'm Ready!") or var[1]:find("Ready!") or var[1]:find("Im Ready!") then
+            logToConsole("`b[`9STARTOPIA`b] `2READY TO LAND! All automation stopped.")
+            logToConsole("`b[`9STARTOPIA`b] `6You can now choose to land on the planet!")
+            return true
+        end
+            
     if var[1]:find("add_label_with_icon|big|`wsnPilots Data") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
         if var[1]:find("Skill Success") then
@@ -3677,5 +3689,6 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
