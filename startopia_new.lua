@@ -4,25 +4,6 @@
 -- Thanks to Otan, Monovs, Nightxx
 -- Recoded some codes by evilzoldyck
 
-var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    sleep(500)
-    encounterActive = false
-    encounterType = ""
-    encounterTool = ""
-    step = 0
-    Mission = 0
-    lastToolUsed = ""
-    toolSuccess = false
-    readyToLand = false
-    AddHook("OnVarlist", "hookied", hook)
-
 function logTime(satan, satanSleep) 
     logToConsole("[ `4E V I L`` ] `9Script Loading...")
     sendVariant({
@@ -3988,7 +3969,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
     return false
     end
     
-    opening = [[
+opening = [[
 add_label_with_icon|big|`9S T A R T O P I A GentaHax``|left|7074|
 add_textbox|`2Hello`@]]..getLocal().name ..[[`` Thank You For Using This Script :3|
 add_smalltext|`2[ - ] Credit : `4EviL - Otan - Monovs - Nightxx``|
@@ -4006,5 +3987,24 @@ add_button_with_icon||END_LIST|noflags|0||
 add_spacer|small||
 end_dialog|stardial||`cEVILGANTENG|
 ]]
+
+var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    sleep(500)
+    encounterActive = false
+    encounterType = ""
+    encounterTool = ""
+    step = 0
+    Mission = 0
+    lastToolUsed = ""
+    toolSuccess = false
+    readyToLand = false
+    AddHook("OnVarlist", "hookied", hook)
 
 end
