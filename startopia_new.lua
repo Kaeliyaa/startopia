@@ -184,24 +184,12 @@ end
 
 function hook(var)
     if var[0] == "OnDialogRequest" and var[1]:find("end_dialog|startopia") and var[1]:find("Health") then
+        checkToolResult(var[1])
         
-                -- FIRST: Check for tool results (Success/Fail) and handle step progression
-        if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
-            -- Log the tool result
-            if lastToolUsed ~= "" then
-                if var[1]:find("Skill Success") then
-                    logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `2SUCCESS ✓")
-                elseif var[1]:find("Skill Fail") then
-                    logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `4FAILED ✗")
-                end
-            end
-        end  -- Missing 'end' statement added here
-            
-        -- SECOND: Check for encounters (but only if we're not in first turn)
-        if step > 0 then
-            if handleExternalEncounters(var[1]) then
-                return true  -- Exit early if encounter was handled
-            end
+
+        -- Then check for external encounters (but not during tool result processing)
+        if handleExternalEncounters(var[1]) then
+            return true
         end
         
         -- Ready to land check
@@ -3851,6 +3839,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
