@@ -11,7 +11,7 @@ function logTime(satan, satanSleep)
     })
   sleep(satanSleep)
   sendVariant({[0] = "OnEndMission", }) 
-  end
+ end
   logTime(3, 3000)
   sendVariant({
   [0] = "OnAddNotification", 
@@ -26,7 +26,7 @@ sendVariant({
   logToConsole("YAHAHAHAHAHHAHAHAHAHAHAHAH") 
 return true
 end
-end)
+end
 if true then
     function Drone()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6532")
@@ -360,7 +360,7 @@ end
             end
             
             -- Continue with mission logic only if not ready to land and not blocked
-            if not readyToLand then
+if not readyToLand then
             
     if var[1]:find("add_label_with_icon|big|`wsnPilots Data") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
@@ -3939,7 +3939,8 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
         return true
     end
     end        
-    
+    end
+    end
             
     elseif var[0] == "OnDialogRequest" and var[1]:find("`8Not enough Star Fuel") then
     sendPacket(2, "action|input\n|text|`1check your `4star fuel")
@@ -4005,6 +4006,7 @@ var = {}
     readyToLand = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
