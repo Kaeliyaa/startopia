@@ -3939,7 +3939,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
         return true
     end
     end        
-    end
+    
             
     elseif var[0] == "OnDialogRequest" and var[1]:find("`8Not enough Star Fuel") then
     sendPacket(2, "action|input\n|text|`1check your `4star fuel")
@@ -4005,6 +4005,7 @@ var = {}
     readyToLand = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
