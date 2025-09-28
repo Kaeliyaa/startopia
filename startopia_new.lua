@@ -30,131 +30,167 @@ end)
 if true then
     function Drone()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6532")
-    logToConsole("`$[`2TOOLS`$] `4Tactical Drone")
-    end
-    
-    function Teleporter()
+    lastToolUsed = "Tactical Drone"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Teleporter()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6526")
-    logToConsole("`$[`2TOOLS`$] `4Teleporter Charge")
-    end
-    
-    function Doc()
+    lastToolUsed = "Teleporter Charge"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Doc()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6534")
-    logToConsole("`$[`2TOOLS`$]`4 Stellar Documents")
-    end
-    
-    function Scan()
+    lastToolUsed = "Stellar Documents"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Scan()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6530")
-    logToConsole("`$[`2TOOLS`$]`4 Quadriscanner")
-    end
-    
-    function Torp()
+    lastToolUsed = "Quadriscanner"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Torp()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6540")
-    logToConsole("`$[`2TOOLS`$]`4 Growton Torpedo")
-    end
-    
-    function Dip()
+    lastToolUsed = "Growton Torpedo"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Dip()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6538")
-    logToConsole("`$[`2TOOLS`$]`4 Cyborg Diplomat")
-    end
-    
-    function Sup()
+    lastToolUsed = "Cyborg Diplomat"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Sup()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6536")
-    logToConsole("`$[`2TOOLS`$]`4 Star Supplies")
-    end
-    
-    function Giga()
+    lastToolUsed = "Star Supplies"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Giga()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6528")
-    logToConsole("`$[`2TOOLS`$] `4Gigablaster")
-    end
-    
-    function Shield()
+    lastToolUsed = "Gigablaster"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Shield()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6518")
-    logToConsole("`$[`2TOOLS`$] `4HyperShields")
-    end
-    
-    function AI()
+    lastToolUsed = "HyperShields"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function AI()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6520")
-    logToConsole("`$[`2TOOLS`$] `4AI Brain")
-    end
-    
-    function Gala()
+    lastToolUsed = "AI Brain"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Gala()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6522")
-    logToConsole("`$[`2TOOLS`$] `4Galactibolt")
-    end
-    
-    function Meds()
+    lastToolUsed = "Galactibolt"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+function Meds()
     sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6524")
-    logToConsole("`$[`2TOOLS`$] `4Space Meds")
+    lastToolUsed = "Space Meds"
+    logToConsole("`$[`2TOOLS`$] `4" .. lastToolUsed .. " - `6USED")
+end
+
+-- Function to check tool result and display indicator
+function checkToolResult(dialog)
+    if lastToolUsed ~= "" then
+        if dialog:find("Skill Success") then
+            toolSuccess = true
+            logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `2SUCCESS ✓")
+            return true
+        elseif dialog:find("Skill Fail") then
+            toolSuccess = false
+            logToConsole("`$[`2RESULT`$] `4" .. lastToolUsed .. " - `4FAILED ✗")
+            return true
+        end
     end
+    return false
+end
 
 -- External Encounters Handler
 function handleExternalEncounters(dialog)
-    -- Diplomatic Issues
-    if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Diplomatic Issue")
-        Dip()
-        return true
-    end
-    
-    -- Computer/AI Problems
-    if dialog:find("Pirate are hacking our computer systems!") or dialog:find("Star Command are not happy! All they see are the popups when they hail you!") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Computer System Issue")
-        AI()
-        return true
-    end
-    
-    -- Radiation Leaks
-    if dialog:find("The reactor's leaking radiation!") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Radiation Leak")
-        Meds()
-        return true
-    end
-    
-    -- Document Issues
-    if dialog:find("Misfiled documents") or dialog:find("Contacted by a bureaucrat from Laymtak II") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Documentation Issue")
-        Doc()
-        return true
-    end
-    
-    -- Combat/Torpedo Issues
-    if dialog:find("A wing of pirate ships swoops in from above!") or dialog:find("Grinding sound coming from outside") or dialog:find("Your ship engineer is urgently requesting a test fire of the Torpedoes") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Combat Situation")
-        Torp()
-        return true
-    end
-    
-    -- Shield Problems
-    if dialog:find("Silicoid Worms attached themselves to our shields!") or dialog:find("Shield Generator still fluctuating") or dialog:find("Space Debris") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Shield Malfunction")
-        Shield()
-        return true
-    end
-    
-    -- Hostile Creatures/Crew Issues
-    if dialog:find("Rabid space dogs") or dialog:find("Disloyal crew") or dialog:find("Space snakes attack") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Hostile Encounter")
-        Giga()
-        return true
-    end
-    
-    -- Ship System Failures
-    if dialog:find("The main cargo door isn't opening") or 
-       dialog:find("One of the crew looks out of the window and notices that the left engine is almost hanging off!") or
-       dialog:find("The lights throughout the ship are failing. It's getting really dark and hard to see") or
-       dialog:find("Oh dear! It looks like some of the ship's plumbing isn't working") or
-       dialog:find("We're still losing pressure to that oxygen leak! The effects on our crew are getting worse!") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Ship System Failure")
-        Gala()
-        return true
-    end
-    
-    -- Supply/Reputation Issues
-    if dialog:find("The refugees of the local starvation crisis are blaming us for it! It's not our fault, but it's damaging our reputation, all the same!") then
-        logToConsole("`b[`9ENCOUNTER`b] `6Supply Crisis")
-        Sup()
-        return true
+    -- Only check for encounters if we're not in the middle of processing a tool result
+    if not (dialog:find("Skill Success") or dialog:find("Skill Fail")) then
+        
+        -- Diplomatic Issues
+        if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Diplomatic Issue")
+            Dip()
+            return true
+        end
+        
+        -- Computer/AI Problems
+        if dialog:find("Pirate are hacking our computer systems!") or dialog:find("Star Command are not happy! All they see are the popups when they hail you!") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Computer System Issue")
+            AI()
+            return true
+        end
+        
+        -- Radiation Leaks
+        if dialog:find("The reactor's leaking radiation!") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Radiation Leak")
+            Meds()
+            return true
+        end
+        
+        -- Document Issues
+        if dialog:find("Misfiled documents") or dialog:find("Contacted by a bureaucrat from Laymtak II") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Documentation Issue")
+            Doc()
+            return true
+        end
+        
+        -- Combat/Torpedo Issues
+        if dialog:find("A wing of pirate ships swoops in from above!") or 
+           dialog:find("Grinding sound coming from outside") or 
+           dialog:find("Your ship engineer is urgently requesting a test fire of the Torpedoes") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Combat Situation")
+            Torp()
+            return true
+        end
+        
+        -- Shield Problems
+        if dialog:find("Silicoid Worms attached themselves to our shields!") or 
+           dialog:find("Shield Generator still fluctuating") or 
+           dialog:find("Space Debris") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Shield Malfunction")
+            Shield()
+            return true
+        end
+        
+        -- Hostile Creatures/Crew Issues
+        if dialog:find("Rabid space dogs") or dialog:find("Disloyal crew") or dialog:find("Space snakes attack") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Hostile Encounter")
+            Giga()
+            return true
+        end
+        
+        -- Ship System Failures
+        if dialog:find("The main cargo door isn't opening") or 
+           dialog:find("One of the crew looks out of the window and notices that the left engine is almost hanging off!") or
+           dialog:find("The lights throughout the ship are failing. It's getting really dark and hard to see") or 
+           dialog:find("Oh dear! It looks like some of the ship's plumbing isn't working") or
+           dialog:find("We're still losing pressure to that oxygen leak! The effects on our crew are getting worse!") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Ship System Failure")
+            Gala()
+            return true
+        end
+        
+        -- Supply/Reputation Issues
+        if dialog:find("The refugees of the local starvation crisis are blaming us for it! It's not our fault, but it's damaging our reputation, all the same!") then
+            logToConsole("`b[`9ENCOUNTER`b] `6Supply Crisis")
+            Sup()
+            return true
+        end
     end
     
     return false
@@ -3637,6 +3673,9 @@ var = {}
     sleep(500)
     step = 0
     Mission = 0
+    lastToolUsed = ""
+    toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
