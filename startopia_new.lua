@@ -3,6 +3,26 @@
 -- Respect the creator! --
 -- Thanks to Otan, Monovs, Nightxx
 -- Recoded some codes by evilzoldyck
+
+var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    var = {}
+    var[0] = "OnDialogRequest"
+    var[1] = opening
+    sendVariant(var)
+    sleep(500)
+    encounterActive = false
+    encounterType = ""
+    encounterTool = ""
+    step = 0
+    Mission = 0
+    lastToolUsed = ""
+    toolSuccess = false
+    readyToLand = false
+    AddHook("OnVarlist", "hookied", hook)
+
 function logTime(satan, satanSleep) 
     logToConsole("[ `4E V I L`` ] `9Script Loading...")
     sendVariant({
@@ -11,7 +31,7 @@ function logTime(satan, satanSleep)
     })
   sleep(satanSleep)
   sendVariant({[0] = "OnEndMission", }) 
- end
+  end
   logTime(3, 3000)
   sendVariant({
   [0] = "OnAddNotification", 
@@ -23,70 +43,70 @@ sendVariant({
 [0] = "OnAddNotification", 
 [2] = "Warning from `4System``: You've been `4BANNED`` from `wGrowtopia`` for 60 days",
  [3] = "audio/gong.wav"}) 
-  logToConsole("YAHAHAHAHAHHAHAHAHAHAHAHAH") 
+logToConsole("YAHAHAHAHAHHAHAHAHAHAHAHAH") 
 return true
 end
-end
+end)
 if true then
     function Drone()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6532")
-    lastToolUsed = "Tactical Drone"
-end
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6532")
+        lastToolUsed = "Tactical Drone"
+    end
 
-function Teleporter()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6526")
-    lastToolUsed = "Teleporter Charge"
-end
+    function Teleporter()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6526")
+        lastToolUsed = "Teleporter Charge"
+    end
 
-function Doc()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6534")
-    lastToolUsed = "Stellar Documents"
-end
+    function Doc()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6534")
+        lastToolUsed = "Stellar Documents"
+    end
 
-function Scan()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6530")
-    lastToolUsed = "Quadriscanner"
-end
+    function Scan()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6530")
+        lastToolUsed = "Quadriscanner"
+    end
 
-function Torp()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6540")
-    lastToolUsed = "Growton Torpedo"
-end
+    function Torp()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6540")
+        lastToolUsed = "Growton Torpedo"
+    end
 
-function Dip()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6538")
-    lastToolUsed = "Cyborg Diplomat"
-end
+    function Dip()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6538")
+        lastToolUsed = "Cyborg Diplomat"
+    end
 
-function Sup()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6536")
-    lastToolUsed = "Star Supplies"
-end
+    function Sup()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6536")
+        lastToolUsed = "Star Supplies"
+    end
 
-function Giga()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6528")
-    lastToolUsed = "Gigablaster"
-end
+    function Giga()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6528")
+        lastToolUsed = "Gigablaster"
+    end
 
-function Shield()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6518")
-    lastToolUsed = "HyperShields"
-end
+    function Shield()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6518")
+        lastToolUsed = "HyperShields"
+    end
 
-function AI()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6520")
-    lastToolUsed = "AI Brain"
-end
+    function AI()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6520")
+        lastToolUsed = "AI Brain"
+    end
 
-function Gala()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6522")
-    lastToolUsed = "Galactibolt"
-end
+    function Gala()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6522")
+        lastToolUsed = "Galactibolt"
+    end
 
-function Meds()
-    sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6524")
-    lastToolUsed = "Space Meds"
-end
+    function Meds()
+        sendPacket(2, "action|dialog_return\ndialog_name|startopia\nbuttonClicked|tool6524")
+        lastToolUsed = "Space Meds"
+    end
 
 -- Mission-Interrupting Encounter System
 local encounterQueue = {}
@@ -360,7 +380,7 @@ end
             end
             
             -- Continue with mission logic only if not ready to land and not blocked
-if not readyToLand then
+            if not readyToLand then
             
     if var[1]:find("add_label_with_icon|big|`wsnPilots Data") then
     if var[1]:find("Skill Success") or var[1]:find("Skill Fail") then
@@ -3938,7 +3958,7 @@ elseif var[1]:find("add_label_with_icon|big|`wA New Home") then
         Drone()
         return true
     end
-    end        
+    end
     end
     end
             
@@ -3987,46 +4007,4 @@ add_spacer|small||
 end_dialog|stardial||`cEVILGANTENG|
 ]]
 
-var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    var = {}
-    var[0] = "OnDialogRequest"
-    var[1] = opening
-    sendVariant(var)
-    sleep(500)
-    encounterActive = false
-    encounterType = ""
-    encounterTool = ""
-    step = 0
-    Mission = 0
-    lastToolUsed = ""
-    toolSuccess = false
-    readyToLand = false
-    AddHook("OnVarlist", "hookied", hook)
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
