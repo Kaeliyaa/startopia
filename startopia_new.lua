@@ -106,6 +106,7 @@ end
 
 -- External Encounters Handler
 function handleExternalEncounters(dialog)
+        if not (dialog:find("Skill Success") or dialog:find("Skill Fail")) then
         -- Diplomatic Issues
         if dialog:find("Grumpy Ambassador") or dialog:find("Your communicators burst into life! It's your mother! Wow!") then
             logToConsole("`b[`9ENCOUNTER`b] `6Diplomatic Issue")
@@ -3839,6 +3840,7 @@ var = {}
     toolSuccess = false
     AddHook("OnVarlist", "hookied", hook)
 end
+
 
 
 
